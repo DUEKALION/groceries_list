@@ -8,7 +8,7 @@ function Content({ items, handleCheck, handleDelete}) {
 
   return (
     <main className="main">
-        {items.length ? (
+        {items?.length ? (
             <ItemList 
                 items={items}
                 handleCheck={handleCheck}

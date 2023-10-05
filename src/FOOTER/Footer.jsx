@@ -3,7 +3,6 @@ import "./footer.css"
 
 export default function Footer({ length }) {
 
-    const today = new  Date();
 
   return (
     <footer>

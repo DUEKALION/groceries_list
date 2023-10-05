@@ -2,66 +2,70 @@ import React, {useState} from 'react';
 import Header from './HEADER/Header';
 import Content from './CONTENT/Content';
 import Footer from './FOOTER/Footer';
+import AddItem from './ADDITEM/AddItem'
+
 import "./app.css";
 
-const App = () => {
 
-  const [items, setItems] = useState([
-    {
-        id: 1,
-        checked: true,
-        item: "2 Congos of foreign Rice"
-    },
+export const App = () => {
 
-    {
-        id: 2,
-        checked: false,
-        item: "Tin Tomatoes and fresh Pepper"
-    },
+  const [items, setItems] = useState([]);
+  const [newItem, setNewItems] = useState('');
 
-    {
-        id: 3,
-        checked: false,
-        item: "Spicies(Curry, Thyme, Garlic, Ginger and Chilli pepper"
-    },
+  const setAndSaveItems = (newItems) => {
 
-    {
-        id: 4,
-        checked: false,
-        item: "Vegetable Oil, Maggi Cubes, Salt and Onions"
-    }
-]);
+    setItems(newItems);
+    localStorage.setItem('shoppinglist', JSON.stringify(newItems));
+  }
 
+   const AddObj = (item) => {
 
-const handleCheck = (id) => {
+    const id = items.length ? items[items.length - 1].id + 1 : 1;
+    const myNewItem = {id, checked: false, item};
+    const listItems = [...items, myNewItem];
+    setItems(listItems);
+  }
+
+ const handleCheck = (id) => {
        
   const listItems = items.map((item) => item.id === id ? {...item, checked: !item.checked} : item);
 
-  setItems(listItems);
-  
-  localStorage.setItem("shoppingList", JSON.stringify(listItems));
+  setAndSaveItems(listItems);
 }
 
 const handleDelete = (id) => {
 
   const listItems = items.filter((item) => item.id !== id);
-  setItems(listItems);
   
-  localStorage.setItem("shoppingList", JSON.stringify(listItems));
+  setAndSaveItems(listItems);
 }
+
+  const handleSubmit = (e) => {
+
+    e.preventDefault();
+    if (!newItem) return;
+    AddObj(newItem);
+    setNewItems('')
+  }
 
 
   return (
     <div className="App">
         <Header />
+
+        <AddItem
+          newItem={newItem}
+          setNewItems={setNewItems}
+          handleSubmit={handleSubmit}
+        />
+ 
         <Content 
           items={items}
           handleCheck={handleCheck}
           handleDelete={handleDelete}
-        />
-        <Footer length={items.length} />
+        /> 
+
+        <Footer length={items?.length} />
     </div>
   )
 }
-
-export default App
